@@ -1,0 +1,88 @@
+@using P01.Models;
+
+@{
+    String currentDate = DateTime.Now.Year.ToString() + '-' + DateTime.Now.Month.ToString("D2") + '-' + DateTime.Now.Day.ToString("D2");
+    String maxDate =  (DateTime.Now.Year + 1).ToString() + '-' + DateTime.Now.Month.ToString("D2") + '-' + DateTime.Now.Day.ToString("D2");
+    int numberOfPages = (Notebook.DisplayedNotes.Count - 1)/10 + 1;
+    int currentPage = Notebook.recentlyTouchedNote/10 +1;
+    int displayRange =  currentPage * 10 < Notebook.DisplayedNotes.Count ? displayRange = currentPage *10 : displayRange = Notebook.DisplayedNotes.Count;
+}
+ <div class = "well">
+            <form asp-action="Filter" asp-controller="Calendar">    
+                <div class = "row">
+                    <div class="col-sm-3">
+                        From: 
+                        <input type="date" name = "from" value = @currentDate> 
+                    </div>
+                    <div class="col-sm-3">
+                        To:
+                        <input type="date" name = "to" value = @maxDate> 
+                    </div>
+                    <div class="col-sm-4">
+                        Category:
+                        <input type="text" name = "category" value ="any">
+                    </div>
+                    <div class="col-sm-2">
+                        <div class = "btn-group">
+                            <input type="submit" value="Filter">
+                            <input type="reset" value = "Clear">
+                        </div>
+                    </div>
+
+            
+                </div>
+            </form>
+            <table class="table table-bordered" style="border:3px">
+                <thead style="background-color:#887672">
+                <tr>
+                    <th style="width:100px; color:white">Date</th>
+                    <th style="color:white">Title</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @for(int i = 10 * (currentPage -1);i < @displayRange ;i++)
+                {
+                    <tr>
+                    @{
+                    Note note = Notebook.DisplayedNotes.Find(notie => notie.displayID == i );
+                    string printableDate =  note.ValidityDate.Date.ToString("d");
+
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => printableDate) 
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => note.Title)
+                    <div align="right">
+                     <a asp-action="Edit" asp-route-id= "@note.uniqueID" class="btn btn-primary">Edit</a>
+                     <a asp-action="DeleteFile" asp-route-id= "@note.uniqueID" class="btn btn-danger">Delete</a>
+                    </div>
+                    </td>
+                </tr>
+                }                     
+                </tbody>
+            </table>
+
+            <hr />
+            
+            <div class = "row">
+                <div class="col-sm-6">
+                    <div class="btn-group">
+                    <a asp-controller="Calendar" asp-action="New" type = "button" class="btn btn-success">New</a>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <a asp-controller="Calendar" asp-action="PreviousPage" type = "button" class="btn btn-default">Previous Page</a>
+                </div>
+                <div class ="col-sm-2"> Page: @currentPage / @numberOfPages </div>
+                <div class="col-sm-2">
+                    <a asp-controller="Calendar" asp-action="NextPage" type = "button" class="btn btn-default">Next Page</a>
+                </div>
+
+        
+            </div>
+            <hr />
+            
+
+
+        </div>

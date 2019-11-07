@@ -1,0 +1,40 @@
+@model P01.Models.Note
+@{
+    String printableDate = @Model.ValidityDate.Year.ToString() + '-'+@Model.ValidityDate.Month.ToString("D2") + '-' + @Model.ValidityDate.Day.ToString("D2");
+}
+<div class = "well">
+
+    <form asp-action="SubmitChanges" asp-controller="Calendar" asp-route-id=@Model.uniqueID id ="submitaction">
+        <div class = "row">
+            <div class ="col-sm-1"> Title: </div>
+            <div class ="col-sm-9">
+                
+                    <input type = "text" style = "width:500px" name = "title" value = "@Model.Title">
+                 
+            </div>
+            <div class ="col-sm-2">
+            </div>
+        </div>
+        <textarea name="text" style="width:1100px; height:400px;" form = "submitaction"> @Model.Content</textarea>  
+        <div class = "row">
+            <div class = "col-sm-5 col-sm-offset-4"> Category:
+                <input type = "text" name = "category" value ="@Model.Category">
+            </div>
+            <div class = "col-sm-3"> Date:
+                <input type = "date" name = "date" value = @printableDate>
+            </div>
+            
+        </div>
+        <hr/>
+        <div align="right">
+        <input type="submit" value="OK" class="btn btn-default">
+        <a asp-controller="Calendar" asp-action="Index" type = "button" class="btn btn-default">Cancel</a>
+        </div>
+    </form>
+    
+
+    
+        
+
+
+</div>
